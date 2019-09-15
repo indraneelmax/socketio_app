@@ -9,6 +9,11 @@ socketio = SocketIO(app)
 def handle_message(message):
     print('received on server my event: ', message)
 
+@socketio.on('ping_event')
+def handle_ping(message):
+    print('Ping received on server: ', message)
+
+
 @app.route('/')
 def root():
     return app.send_static_file('index.html')
