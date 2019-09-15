@@ -8,15 +8,30 @@
     <body>
         <h1>Communication with socket.io!</h1>
         <button type="button" name="ping_server", id="ping_server_button">PING SERVER</button>
+        <input type="text" id="from_server"></input>
+        <label id="clock"></label>
         <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
         <script type="text/javascript" charset="utf-8">
             var socket = io();
             socket.on('connect', function() {
                 socket.emit('my event', {data: 'I\'m connected!'});
+                document.getElementById("from_server").value = "Status: Connected!"
             });
+            socket.on("disconnect", function() {
+              document.getElementById("from_server").value = "Status: Disconnected!"
+            })
             document.getElementById("ping_server_button").addEventListener("click", button_clicked);
             function button_clicked(){
               socket.emit("ping_event", {data: 'Ping from client'})
+            }
+            socket.on("pong_event", function(data) {
+              document.getElementById("from_server").value = data
+            })
+            timerId = setInterval(set_clock, 1000)
+            function set_clock(){
+              let d = new Date()
+              format_date = d.getDate()+ "/" + d.getMonth() + "--" + d.getHours() + ":" + d.getMinutes()
+              document.getElementById("clock").innerHTML = format_date
             }
         </script>
     </body>

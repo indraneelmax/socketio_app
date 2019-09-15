@@ -12,6 +12,7 @@ def handle_message(message):
 @socketio.on('ping_event')
 def handle_ping(message):
     print('Ping received on server: ', message)
+    socketio.emit("pong_event", "Ping received - Acknowledged")
 
 
 @app.route('/')
